@@ -110,6 +110,7 @@ function Dashboard({ onToast }) {
   );
 
   const latestComponents = components.slice(-5).reverse();
+  const adminRequests = role === "ADMIN" ? requests : [];
   const pendingRequests = requests.filter((item) => item.status === "PENDING");
   const myRequests = requests.filter((item) => item.requestedBy === email);
 
@@ -372,41 +373,57 @@ function Dashboard({ onToast }) {
               </form>
 
               <section className="console-panel">
-                <h2>Component Request Queue</h2>
+                <div className="section-title compact-title">
+                  <div>
+                    <h2>User Component Requests</h2>
+                    <p className="console-muted">Requests submitted by users are mapped here for admin review.</p>
+                  </div>
+                  <span>{pendingRequests.length} pending</span>
+                </div>
 
-                {pendingRequests.length === 0 && (
-                  <p className="console-muted">No pending user requests.</p>
+                {adminRequests.length === 0 && (
+                  <p className="console-muted">No user requests have been submitted yet.</p>
                 )}
 
-                {pendingRequests.length > 0 && (
+                {adminRequests.length > 0 && (
                   <div className="queue-table">
                     <div className="queue-row queue-head">
                       <span>Name</span>
                       <span>Category</span>
                       <span>Requested By</span>
-                      <span>Actions</span>
+                      <span>Status / Actions</span>
                     </div>
 
-                    {pendingRequests.map((item) => (
+                    {adminRequests.map((item) => (
                       <div className="queue-row" key={item.id}>
-                        <span>{item.name}</span>
+                        <span>
+                          <strong>{item.name}</strong>
+                          <small>{item.description || item.message || "No description provided."}</small>
+                        </span>
                         <span>{item.category || "General"}</span>
                         <span>{item.requestedBy || "User"}</span>
-
                         <span className="queue-actions">
-                          <button
-                            type="button"
-                            onClick={() => reviewRequest(item, "accept")}
-                          >
-                            Accept
-                          </button>
+                          {item.status === "PENDING" ? (
+                            <>
+                              <button
+                                type="button"
+                                onClick={() => reviewRequest(item, "accept")}
+                              >
+                                Accept
+                              </button>
 
-                          <button
-                            type="button"
-                            onClick={() => reviewRequest(item, "reject")}
-                          >
-                            Reject
-                          </button>
+                              <button
+                                type="button"
+                                onClick={() => reviewRequest(item, "reject")}
+                              >
+                                Reject
+                              </button>
+                            </>
+                          ) : (
+                            <span className={item.status === "ACCEPTED" ? "accepted-dot" : "rejected-dot"}>
+                              {item.status}
+                            </span>
+                          )}
                         </span>
                       </div>
                     ))}

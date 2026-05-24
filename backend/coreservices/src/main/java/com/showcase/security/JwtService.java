@@ -41,4 +41,3 @@ public class JwtService {
                 .getBody();
     }
 }
-

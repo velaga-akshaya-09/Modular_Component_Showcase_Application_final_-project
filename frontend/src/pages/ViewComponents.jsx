@@ -98,6 +98,17 @@ function ViewComponents({ onToast }) {
     });
   };
 
+  const useComponent = async (component) => {
+    const usage = component.usageExample || component.codeSnippet || `<${component.name?.replace(/\s+/g, "") || "Component"} />`;
+
+    await navigator.clipboard.writeText(usage);
+    onToast?.({
+      title: "Usage copied",
+      message: `${component.name} is ready to paste into your app.`,
+      type: "success",
+    });
+  };
+
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     loadData();
@@ -272,14 +283,47 @@ function ViewComponents({ onToast }) {
                 <div className="component-preview-box">
                   <strong>{selectedComponent.name}</strong>
                   <p>{selectedComponent.description}</p>
-                  <button type="button">Primary Action</button>
+                  <button type="button" onClick={() => useComponent(selectedComponent)}>
+                    Use Component
+                  </button>
                 </div>
               </article>
 
               <article className="preview-card">
                 <h3><DocsIcon /> Documentation</h3>
                 <p>{selectedComponent.documentation || "No documentation added yet."}</p>
-                <Link to={`/component/${selectedComponent.id}`}>Open full details</Link>
+                <dl className="component-meta-list">
+                  <div>
+                    <dt>Name</dt>
+                    <dd>{selectedComponent.name}</dd>
+                  </div>
+                  <div>
+                    <dt>Component ID</dt>
+                    <dd>{selectedComponent.id}</dd>
+                  </div>
+                  <div>
+                    <dt>Created By</dt>
+                    <dd>{selectedComponent.createdBy || "Unknown"}</dd>
+                  </div>
+                  <div>
+                    <dt>Category</dt>
+                    <dd>{selectedComponent.category || "Uncategorized"}</dd>
+                  </div>
+                  <div>
+                    <dt>Created At</dt>
+                    <dd>
+                      {selectedComponent.createdAt
+                        ? new Date(selectedComponent.createdAt).toLocaleDateString()
+                        : "Not recorded"}
+                    </dd>
+                  </div>
+                </dl>
+                <Link className="inline-detail-link" to={`/component/${selectedComponent.id}`}>Open full details</Link>
+              </article>
+
+              <article className="preview-card preview-usage">
+                <h3><CodeIcon /> Usage Example</h3>
+                <pre>{selectedComponent.usageExample || selectedComponent.codeSnippet || "<Component />"}</pre>
               </article>
 
               <article className="preview-card preview-code">

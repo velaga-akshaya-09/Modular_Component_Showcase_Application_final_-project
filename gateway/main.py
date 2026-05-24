@@ -4,7 +4,7 @@ from routes import auth_routes, category_routes, component_routes, search_routes
 
 app = FastAPI(title="Modular Component Showcase Gateway")
 
-app.add_middleware(            
+app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
     allow_credentials=True,

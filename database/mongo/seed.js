@@ -51,4 +51,3 @@ db.component_embeddings.insertMany(
 db.component_descriptions.createIndex({ componentId: 1 }, { unique: true });
 db.component_embeddings.createIndex({ componentId: 1 }, { unique: true });
 db.usage_logs.createIndex({ createdAt: -1 });
-
