@@ -288,25 +288,25 @@ function Dashboard({ onToast }) {
               <article className="stat-card">
                 <ComponentsIcon />
                 <span>Registered Components</span>
-                <strong>{components.length} patterns</strong>
+                <strong className="counter-value">{components.length} patterns</strong>
               </article>
 
               <article className="stat-card">
                 <DocsIcon />
                 <span>Component Groups</span>
-                <strong>{categoryNames.length} categories</strong>
+                <strong className="counter-value">{categoryNames.length} categories</strong>
               </article>
 
               <article className="stat-card">
                 <ChartIcon />
                 <span>Top Core Pattern</span>
-                <strong>{mostUsedComponent.name}</strong>
+                <strong className="counter-value">{mostUsedComponent.name}</strong>
               </article>
 
               <article className="stat-card">
                 <ClockIcon />
                 <span>Newly Seeded Assets</span>
-                <strong>{latestComponents.length} added</strong>
+                <strong className="counter-value">{latestComponents.length} added</strong>
               </article>
             </section>
           )}

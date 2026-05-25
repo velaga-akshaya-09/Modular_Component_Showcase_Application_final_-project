@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../api/axios";
+import api, { getApiErrorMessage } from "../api/axios";
 
 function AddComponent() {
   const role = localStorage.getItem("role");
@@ -40,7 +40,7 @@ function AddComponent() {
     } catch (error) {
       setStatus({
         type: "error",
-        message: error.response?.data?.detail || "Unable to save component. Check gateway/backend services.",
+        message: getApiErrorMessage(error, "Unable to save component. Check gateway/backend services."),
       });
     }
   };

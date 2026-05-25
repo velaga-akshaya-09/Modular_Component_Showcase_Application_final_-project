@@ -321,22 +321,22 @@ function ViewComponents({ onToast }) {
             <article className="stat-card">
               <ComponentsIcon />
               <span>Total Components</span>
-              <strong>{components.length}</strong>
+              <strong className="counter-value">{components.length}</strong>
             </article>
             <article className="stat-card">
               <DocsIcon />
               <span>Categories</span>
-              <strong>{categoryOptions.length - 1}</strong>
+              <strong className="counter-value">{categoryOptions.length - 1}</strong>
             </article>
             <article className="stat-card">
               <ChartIcon />
               <span>Most Used</span>
-              <strong>{mostUsedCategory.name}</strong>
+              <strong className="counter-value">{mostUsedCategory.name}</strong>
             </article>
             <article className="stat-card">
               <EyeIcon />
               <span>Recent Uploads</span>
-              <strong>{recentUploads}</strong>
+              <strong className="counter-value">{recentUploads}</strong>
             </article>
           </section>
 

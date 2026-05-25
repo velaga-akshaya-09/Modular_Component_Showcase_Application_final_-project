@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import api from "../api/axios";
+import api, { getApiErrorMessage } from "../api/axios";
 
 function Login({ onLogin }) {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -20,15 +20,10 @@ function Login({ onLogin }) {
         onLogin(res.data);
         navigate("/dashboard");
       } else {
-        setError(res.data?.error || "Invalid credentials provided.");
+        setError(getApiErrorMessage({ response: res }, "Invalid credentials provided."));
       }
     } catch (err) {
-      const message =
-        err?.response?.data?.detail ||
-        err?.response?.data?.error ||
-        err?.message ||
-        "Authentication failed. Please verify your connection.";
-      setError(message);
+      setError(getApiErrorMessage(err, "Authentication failed. Please verify your connection."));
     } finally {
       setLoading(false);
     }
