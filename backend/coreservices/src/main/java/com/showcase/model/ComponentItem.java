@@ -1,6 +1,7 @@
 package com.showcase.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 @Entity
@@ -11,7 +12,10 @@ public class ComponentItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Component name is required")
     private String name;
+    
+    @NotBlank(message = "Category is required")
     private String category;
     private String tags;
     private String version = "1.0.0";

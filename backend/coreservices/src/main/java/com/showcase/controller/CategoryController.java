@@ -1,11 +1,11 @@
 package com.showcase.controller;
 
 import com.showcase.dto.CategoryRequest;
-import com.showcase.repository.CategoryRepository;
 import com.showcase.model.Category;
+import com.showcase.service.CategoryService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -14,41 +14,31 @@ import java.util.List;
 @RequestMapping("/api/categories")
 public class CategoryController {
 
-    private final CategoryRepository repo;
+    private final CategoryService service;
 
-    public CategoryController(CategoryRepository repo) {
-        this.repo = repo;
+    public CategoryController(CategoryService service) {
+        this.service = service;
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Category addCategory(@RequestBody CategoryRequest request) {
-        Category category = new Category();
-        category.setName(request.name());
-        category.setDescription(request.description());
-        return repo.save(category);
+    public Category addCategory(@Valid @RequestBody CategoryRequest request) {
+        return service.addCategory(request);
     }
 
     @GetMapping
     public List<Category> getCategories() {
-        return repo.findAll();
+        return service.getCategories();
     }
 
     @PutMapping("/{id}")
-    public Category updateCategory(@PathVariable Long id, @RequestBody CategoryRequest request) {
-        Category category = repo.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found"));
-        category.setName(request.name());
-        category.setDescription(request.description());
-        return repo.save(category);
+    public Category updateCategory(@PathVariable Long id, @Valid @RequestBody CategoryRequest request) {
+        return service.updateCategory(id, request);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCategory(@PathVariable Long id) {
-        if (!repo.existsById(id)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found");
-        }
-        repo.deleteById(id);
+        service.deleteCategory(id);
     }
 }

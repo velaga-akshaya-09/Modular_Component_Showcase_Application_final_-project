@@ -1,6 +1,7 @@
 package com.showcase.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 @Entity
@@ -11,7 +12,9 @@ public class ComponentRequestItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Component name is required")
     private String name;
+    
     private String category;
 
     @Column(columnDefinition = "TEXT")
@@ -20,6 +23,7 @@ public class ComponentRequestItem {
     @Column(columnDefinition = "TEXT")
     private String documentation;
 
+    @NotBlank(message = "Requested By cannot be empty")
     private String requestedBy;
     private String status = "PENDING";
 
