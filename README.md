@@ -153,3 +153,7 @@ DELETE /api/components/{id}     ADMIN
 GET  /api/categories            JWT
 POST /api/categories            ADMIN
 ```
+
+## Contributors
+
+- [veerisettyharshitha-sys](https://github.com/veerisettyharshitha-sys)
