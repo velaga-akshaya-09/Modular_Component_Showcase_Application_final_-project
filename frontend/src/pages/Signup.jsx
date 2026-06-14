@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import api, { getApiErrorMessage } from "../api/axios";
+import "../styles/pages/Auth.css";
+import { ComponentsIcon } from "../components/Icons";
 
 function Signup() {
   const [form, setForm] = useState({
@@ -36,7 +38,7 @@ function Signup() {
   return (
     <div className="auth-page">
       <form className="auth-card" onSubmit={signup}>
-        <div className="auth-brand-logo" />
+        <ComponentsIcon className="auth-brand-svg" />
         <h1>Create Account</h1>
         <p className="auth-subtitle">Join our team of developers cataloging design components.</p>
 

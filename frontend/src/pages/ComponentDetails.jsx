@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { CodeIcon, CopyIcon, EyeIcon, DocsIcon } from "../components/Icons";
+import { CodeIcon, CopyIcon, EyeIcon, DocsIcon, HeartIcon, StarIcon, TrashIcon } from "../components/Icons";
 import api from "../api/axios";
 import { REAL_COMPONENTS_MAP } from "../components/RealComponents";
 import { CodeHighlight } from "../components/CodeHighlight";
+import "../styles/pages/ComponentDetails.css";
 
 const withDocumentationDefaults = (component) => {
   const realData = REAL_COMPONENTS_MAP[component.name] || {};
@@ -87,31 +88,100 @@ function ComponentDetails({ onToast }) {
   const [component, setComponent] = useState(null);
   const [status, setStatus] = useState("loading");
   const [activeTab, setActiveTab] = useState("code");
+  
+  const [reviews, setReviews] = useState([]);
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [reviewText, setReviewText] = useState("");
+  const [rating, setRating] = useState(5);
+  const [submitting, setSubmitting] = useState(false);
+
+  const userEmail = localStorage.getItem("email");
+  const userRole = localStorage.getItem("role");
 
   useEffect(() => {
     let isMounted = true;
 
-    api
-      .get("/components")
-      .then((res) => {
-        const records = Array.isArray(res.data) ? res.data : [];
-        const selectedRecord = records.find((item) => String(item.id) === String(id));
+    const loadData = async () => {
+      try {
+        const [compRes, favRes, revRes] = await Promise.all([
+          api.get("/components"),
+          api.get("/favorites"),
+          api.get(`/reviews?componentId=${id}`)
+        ]);
 
         if (isMounted) {
+          const records = Array.isArray(compRes.data) ? compRes.data : [];
+          const selectedRecord = records.find((item) => String(item.id) === String(id));
           setComponent(selectedRecord ? withDocumentationDefaults(selectedRecord) : null);
           setStatus(selectedRecord ? "ready" : "missing");
+
+          const favs = Array.isArray(favRes.data) ? favRes.data : [];
+          // Note: Node.js API returns favorite_id as well, but the component data is spread in it.
+          // favs has the actual component objects including `id`.
+          setIsFavorite(favs.some(f => String(f.id) === String(id)));
+
+          setReviews(Array.isArray(revRes.data) ? revRes.data : []);
         }
-      })
-      .catch(() => {
+      } catch (err) {
         if (isMounted) {
           setStatus("error");
         }
-      });
+      }
+    };
+
+    loadData();
 
     return () => {
       isMounted = false;
     };
   }, [id]);
+
+  const toggleFavorite = async () => {
+    try {
+      if (isFavorite) {
+        await api.delete(`/favorites/component/${id}`);
+        setIsFavorite(false);
+        onToast?.({ title: "Removed from Favorites", type: "info" });
+      } else {
+        await api.post("/favorites", { componentId: id });
+        setIsFavorite(true);
+        onToast?.({ title: "Added to Favorites", type: "success" });
+      }
+    } catch {
+      onToast?.({ title: "Action Failed", type: "error" });
+    }
+  };
+
+  const submitReview = async (e) => {
+    e.preventDefault();
+    if (!reviewText.trim()) return;
+    setSubmitting(true);
+    try {
+      const res = await api.post("/reviews", { componentId: id, rating, comment: reviewText });
+      setReviews([res.data, ...reviews]);
+      setReviewText("");
+      setRating(5);
+      onToast?.({ title: "Review Added", type: "success" });
+    } catch (err) {
+      onToast?.({ 
+        title: "Review Failed", 
+        message: err.response?.data?.error || "Could not submit review", 
+        type: "error" 
+      });
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const deleteReview = async (reviewId) => {
+    try {
+      await api.delete(`/reviews/${reviewId}`);
+      setReviews(reviews.filter(r => r.id !== reviewId));
+      onToast?.({ title: "Review Deleted", type: "info" });
+    } catch {
+      onToast?.({ title: "Delete Failed", type: "error" });
+    }
+  };
 
   const copyCode = async (code) => {
     await navigator.clipboard.writeText(code || "<Component />");
@@ -226,7 +296,18 @@ function ComponentDetails({ onToast }) {
       <div className="page-header">
         <div>
           <p className="eyebrow">{component.category || "Uncategorized"}</p>
-          <h1>{component.name}</h1>
+          <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+            <h1>{component.name}</h1>
+            <button 
+              type="button" 
+              className={`icon-button ${isFavorite ? "active-favorite" : ""}`}
+              onClick={toggleFavorite}
+              title={isFavorite ? "Remove from Favorites" : "Add to Favorites"}
+              style={{ color: isFavorite ? "#e74c3c" : "inherit" }}
+            >
+              <HeartIcon fill={isFavorite ? "currentColor" : "none"} />
+            </button>
+          </div>
           <p>Created by {component.createdBy || "unknown"} · v{component.version} · {component.status}</p>
         </div>
         <Link className="button-link" to="/components">
@@ -266,6 +347,59 @@ function ComponentDetails({ onToast }) {
             
             <h4 style={{ marginTop: "12px" }}>Access Clearance</h4>
             <span className="status-badge-clearance">{component.status}</span>
+          </div>
+
+          <div className="reviews-section" style={{ marginTop: "24px", padding: "16px", backgroundColor: "var(--card-bg)", borderRadius: "8px", border: "1px solid var(--border-color)" }}>
+            <h3 style={{ marginBottom: "16px" }}><StarIcon fill="currentColor" /> Component Reviews</h3>
+            
+            <form onSubmit={submitReview} style={{ display: "flex", flexDirection: "column", gap: "12px", marginBottom: "24px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                <span>Rating:</span>
+                {[1, 2, 3, 4, 5].map(r => (
+                  <button 
+                    key={r} 
+                    type="button" 
+                    onClick={() => setRating(r)}
+                    style={{ background: "none", border: "none", color: r <= rating ? "#f1c40f" : "#555", cursor: "pointer", fontSize: "1.2rem" }}
+                  >
+                    ★
+                  </button>
+                ))}
+              </div>
+              <textarea 
+                placeholder="Share your experience using this component..." 
+                value={reviewText} 
+                onChange={(e) => setReviewText(e.target.value)}
+                style={{ width: "100%", padding: "12px", minHeight: "80px", borderRadius: "4px", border: "1px solid var(--input-border)", background: "var(--input-bg)", color: "var(--text-color)", resize: "vertical" }}
+              />
+              <button type="submit" disabled={submitting || !reviewText.trim()} className="primary-button" style={{ alignSelf: "flex-end" }}>
+                {submitting ? "Submitting..." : "Post Review"}
+              </button>
+            </form>
+
+            <div className="reviews-list" style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+              {reviews.length === 0 ? (
+                <p className="console-muted">No reviews yet. Be the first to review!</p>
+              ) : (
+                reviews.map(review => (
+                  <div key={review.id} style={{ padding: "12px", borderBottom: "1px solid var(--border-color)", display: "flex", flexDirection: "column", gap: "8px" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                      <strong style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                        {review.user_email}
+                        <span style={{ color: "#f1c40f" }}>{"★".repeat(review.rating)}{"☆".repeat(5-review.rating)}</span>
+                      </strong>
+                      {(userEmail === review.user_email || userRole === "ADMIN") && (
+                        <button type="button" onClick={() => deleteReview(review.id)} className="icon-text-button" style={{ color: "var(--text-muted)" }}>
+                          <TrashIcon />
+                        </button>
+                      )}
+                    </div>
+                    <p style={{ margin: 0, fontSize: "0.95rem" }}>{review.comment}</p>
+                    <small className="console-muted">{new Date(review.created_at).toLocaleDateString()}</small>
+                  </div>
+                ))
+              )}
+            </div>
           </div>
         </div>
 

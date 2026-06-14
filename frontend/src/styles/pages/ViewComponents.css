@@ -1,0 +1,92 @@
+.component-search-panel {
+  display: grid;
+  gap: 18px;
+}
+
+.component-registry {
+  padding: 0;
+}
+
+.registry-row strong,
+.registry-row h3 {
+  color: var(--black);
+}
+
+.registry-row p,
+.tag-row small {
+  color: var(--olive-soft);
+}
+
+.tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.rating-row button {
+  min-width: 34px;
+  min-height: 34px;
+  padding: 0;
+}
+
+.explorer-insights,
+.comparison-panel {
+  display: grid;
+  gap: 16px;
+}
+
+.preview-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.docs-section {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.installation-block {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px;
+}
+
+.code-viewer-container,
+.code-tab-panel {
+  overflow: auto;
+}
+
+.code-viewer-lines {
+  float: left;
+  display: grid;
+  padding: 16px 10px;
+  color: var(--olive-soft);
+  border-right: 1px solid var(--border-light);
+}
+
+.code-viewer-pre {
+  margin: 0;
+  min-width: max-content;
+}
+
+.hl-keyword,
+.hl-function,
+.hl-hook,
+.hl-tag {
+  color: var(--black);
+  font-weight: 900;
+}
+
+.hl-string,
+.hl-value,
+.hl-number {
+  color: var(--olive-dark);
+}
+
+.hl-comment {
+  color: var(--olive-soft);
+}

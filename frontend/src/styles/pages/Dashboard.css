@@ -1,0 +1,161 @@
+.console-stage {
+  min-height: calc(100vh - 140px);
+}
+
+.console-window,
+.console-main {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.console-rail {
+  display: none;
+}
+
+.role-hero {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 30px;
+  background: var(--cream-panel);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+}
+
+.role-hero > span {
+  color: var(--olive);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  padding: 6px 10px;
+  font-weight: 900;
+}
+
+.console-tabs nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.console-panel {
+  padding: 22px;
+}
+
+.add-panel,
+.request-grid,
+.component-search-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.request-grid,
+.component-search-grid {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+}
+
+.queue-table,
+.component-registry,
+.activity-panel dl,
+.timeline-list,
+.mini-toast-list {
+  display: grid;
+  gap: 12px;
+}
+
+.queue-row,
+.registry-row,
+.registry-row-pro {
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr) repeat(3, auto);
+  align-items: center;
+  gap: 14px;
+  padding: 14px;
+}
+
+.queue-head {
+  color: var(--black);
+  font-weight: 900;
+}
+
+.queue-actions,
+.registry-row button {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.bar-chart {
+  display: flex;
+  align-items: end;
+  gap: 14px;
+  min-height: 180px;
+}
+
+.bar-item {
+  display: grid;
+  align-content: end;
+  gap: 8px;
+  flex: 1;
+  color: var(--olive);
+}
+
+.bar-item span {
+  display: block;
+  min-height: 20px;
+  background: var(--olive);
+  border-radius: var(--radius-sm);
+}
+
+.activity-panel dl,
+.detail-meta-list,
+.component-meta-list {
+  margin: 0;
+}
+
+.activity-panel div,
+.component-meta-list div {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  padding-block: 8px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.activity-panel dt,
+.component-meta-list dt {
+  color: var(--black);
+  font-weight: 900;
+}
+
+.activity-panel dd,
+.component-meta-list dd {
+  margin: 0;
+  color: var(--olive);
+}
+
+.counter-value,
+.stat-card strong,
+.card-value-display {
+  display: block;
+  color: var(--black);
+  font-size: clamp(1.45rem, 3vw, 2.25rem);
+  line-height: 1;
+}
+
+@media (max-width: 720px) {
+  .role-hero,
+  .request-grid,
+  .component-search-grid,
+  .queue-row,
+  .registry-row,
+  .registry-row-pro {
+    align-items: stretch;
+    grid-template-columns: 1fr;
+  }
+
+  .role-hero {
+    flex-direction: column;
+  }
+}

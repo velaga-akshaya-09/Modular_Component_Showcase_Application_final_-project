@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import api, { getApiErrorMessage } from "../api/axios";
+import "../styles/pages/Auth.css";
+import { ComponentsIcon } from "../components/Icons";
 
 function Login({ onLogin }) {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -37,7 +39,7 @@ function Login({ onLogin }) {
   return (
     <div className="auth-page">
       <form className="auth-card" onSubmit={login}>
-        <div className="auth-brand-logo" />
+        <ComponentsIcon className="auth-brand-svg" />
         <h1>Welcome Back</h1>
         <p className="auth-subtitle">Log in to explore and deploy reusable design system assets.</p>
 

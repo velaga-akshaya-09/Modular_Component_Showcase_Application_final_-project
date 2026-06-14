@@ -8,6 +8,8 @@ import ViewComponents from "./pages/ViewComponents";
 import Categories from "./pages/Categories";
 import SearchComponents from "./pages/SearchComponents";
 import ComponentDetails from "./pages/ComponentDetails";
+import Favorites from "./pages/Favorites";
+import AdminUsers from "./pages/AdminUsers";
 import Unauthorized from "./pages/Unauthorized";
 import Navbar from "./components/Navbar";
 import ToastContainer from "./components/ToastContainer";
@@ -88,7 +90,9 @@ function App() {
         <Route path="/components" element={requireAuth(<ViewComponents onToast={showToast} />)} />
         <Route path="/categories" element={requireAuth(<Categories onToast={showToast} />)} />
         <Route path="/search" element={requireAuth(<SearchComponents onToast={showToast} />)} />
+        <Route path="/favorites" element={requireAuth(<Favorites onToast={showToast} />)} />
         <Route path="/component/:id" element={requireAuth(<ComponentDetails onToast={showToast} />)} />
+        <Route path="/admin/users" element={requireAuth(<AdminUsers onToast={showToast} />)} />
 
         <Route path="/unauthorized" element={<Unauthorized />} />
       </Routes>

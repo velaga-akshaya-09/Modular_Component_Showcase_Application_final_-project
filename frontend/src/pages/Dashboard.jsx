@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { ChartIcon, ClockIcon, ComponentsIcon, DocsIcon } from "../components/Icons";
-import api from "../api/axios";
+import api from "../api/axios";import "../styles/pages/Dashboard.css";
+
 
 function Dashboard({ onToast }) {
   const role = localStorage.getItem("role");

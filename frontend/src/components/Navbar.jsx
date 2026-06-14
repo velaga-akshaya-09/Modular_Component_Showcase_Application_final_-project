@@ -6,6 +6,7 @@ import {
   LogoutIcon,
   PlusIcon,
   SearchIcon,
+  HeartIcon,
 } from "./Icons";
 
 function Navbar({ token, role, onLogout }) {
@@ -18,7 +19,7 @@ function Navbar({ token, role, onLogout }) {
 
   return (
     <nav className="navbar">
-      <h2>Component Library</h2>
+      <h2><ComponentsIcon /> Component Library</h2>
 
       <div>
         {token && (
@@ -27,8 +28,14 @@ function Navbar({ token, role, onLogout }) {
             <NavLink to="/components"><ComponentsIcon /> Components</NavLink>
             <NavLink to="/categories"><DocsIcon /> Categories</NavLink>
             <NavLink to="/search"><SearchIcon /> Search</NavLink>
+            <NavLink to="/favorites"><HeartIcon /> Favorites</NavLink>
 
-            {role === "ADMIN" && <NavLink to="/add-component"><PlusIcon /> Add Component</NavLink>}
+            {role === "ADMIN" && (
+              <>
+                <NavLink to="/add-component"><PlusIcon /> Add Component</NavLink>
+                <NavLink to="/admin/users"><DocsIcon /> Users</NavLink>
+              </>
+            )}
 
             <button onClick={logout}><LogoutIcon /> Logout</button>
           </>

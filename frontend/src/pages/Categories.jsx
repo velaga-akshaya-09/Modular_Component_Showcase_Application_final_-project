@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { ComponentsIcon, DocsIcon, EyeIcon } from "../components/Icons";
-import api from "../api/axios";
+import api from "../api/axios";import "../styles/pages/Admin.css";
+
 
 function Categories({ onToast }) {
   const [categories, setCategories] = useState([]);
@@ -100,7 +101,7 @@ function Categories({ onToast }) {
                     </div>
                     <span><ComponentsIcon /> {category.count} components</span>
                     {category.count > 0 && (
-                      <Link to="/components"><EyeIcon /> View Components</Link>
+                      <Link to={`/components?category=${category.name}`}><EyeIcon /> View Components</Link>
                     )}
                   </article>
                 ))}

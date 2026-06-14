@@ -80,4 +80,22 @@ public class AuthController {
 
         return storedPassword.equals(rawPassword);
     }
+
+    @GetMapping("/users")
+    public ResponseEntity<?> getAllUsers(org.springframework.security.core.Authentication authentication) {
+        if (authentication == null || authentication.getAuthorities().stream().noneMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("error", "Admin access required"));
+        }
+        
+        List<Map<String, Object>> users = userRepository.findAll().stream().map(u -> {
+            Map<String, Object> map = new HashMap<>();
+            map.put("id", u.getId());
+            map.put("name", u.getName());
+            map.put("email", u.getEmail());
+            map.put("role", u.getRole());
+            return map;
+        }).toList();
+        
+        return ResponseEntity.ok(users);
+    }
 }

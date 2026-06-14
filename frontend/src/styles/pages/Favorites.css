@@ -1,0 +1,9 @@
+.page .detail-panel[style] {
+  overflow: hidden;
+}
+
+.primary-button {
+  color: var(--cream);
+  background: var(--olive);
+  border-color: var(--olive);
+}

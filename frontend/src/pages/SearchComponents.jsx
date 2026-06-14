@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { CodeIcon, DocsIcon, EyeIcon, SearchIcon } from "../components/Icons";
-import api from "../api/axios";
+import api from "../api/axios";import "../styles/pages/SearchComponents.css";
+
 
 const sampleQueries = [
   "Form validation components",

@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routes import auth_routes, category_routes, component_routes, search_routes
+from routes import auth_routes, category_routes, component_routes, search_routes, node_routes
 
 app = FastAPI(title="Modular Component Showcase Gateway")
 
@@ -15,6 +15,7 @@ app.add_middleware(
 app.include_router(auth_routes.router)
 app.include_router(category_routes.router)
 app.include_router(component_routes.router, prefix="/gateway")
+app.include_router(node_routes.router, prefix="/gateway")
 app.include_router(search_routes.router)
 
 @app.get("/")

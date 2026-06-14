@@ -1,0 +1,41 @@
+.component-empty-page,
+.detail-meta-panel {
+  display: grid;
+  gap: 18px;
+}
+
+.detail-panel {
+  padding: 22px;
+}
+
+.detail-preview,
+.preview-usage,
+.preview-code {
+  display: grid;
+  gap: 12px;
+}
+
+.detail-meta-box {
+  display: grid;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+}
+
+.detail-meta-box h4 {
+  color: var(--black);
+}
+
+.reviews-section {
+  color: var(--olive);
+}
+
+.reviews-section h3 {
+  color: var(--black);
+}
+
+.review-card,
+.reviews-list > div {
+  border-color: var(--border-light) !important;
+}
