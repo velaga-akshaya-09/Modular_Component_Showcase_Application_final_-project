@@ -1,3 +1,9 @@
+databases:
+  - name: showcase-db
+    databaseName: modular_showcase
+    user: postgres
+    plan: free
+
 services:
   # ---------------------------------------------------------
   # 1. Frontend (React / Vite)
@@ -51,7 +57,12 @@ services:
         value: component_showcase
       - key: PORT
         value: 5000
-      # NOTE: You MUST provide DATABASE_URL and MONGO_URI manually in the Render Dashboard
+      - key: DATABASE_URL
+        fromDatabase:
+          name: showcase-db
+          property: connectionString
+      - key: MONGO_URI
+        value: "mongodb://admin:admin123@ac-fadq7b9-shard-00-00.wjlq0bh.mongodb.net:27017,ac-fadq7b9-shard-00-01.wjlq0bh.mongodb.net:27017,ac-fadq7b9-shard-00-02.wjlq0bh.mongodb.net:27017/component_showcase?ssl=true&replicaSet=atlas-wpw124-shard-0&authSource=admin&retryWrites=true&w=majority"
 
   # ---------------------------------------------------------
   # 4. Backend Java (Spring Boot / PostgreSQL & MongoDB)
@@ -63,6 +74,27 @@ services:
     dockerContext: backend/coreservices
     dockerfilePath: backend/coreservices/Dockerfile
     envVars:
-      # NOTE: You MUST provide SPRING_DATASOURCE_URL, USERNAME, PASSWORD, and SPRING_DATA_MONGODB_URI manually in the Render Dashboard
       - key: JWT_SECRET
         generateValue: true
+      - key: DB_HOST
+        fromDatabase:
+          name: showcase-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: showcase-db
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: showcase-db
+          property: database
+      - key: SPRING_DATASOURCE_USERNAME
+        fromDatabase:
+          name: showcase-db
+          property: user
+      - key: SPRING_DATASOURCE_PASSWORD
+        fromDatabase:
+          name: showcase-db
+          property: password
+      - key: SPRING_DATA_MONGODB_URI
+        value: "mongodb+srv://admin:admin123@cluster0.wjlq0bh.mongodb.net/component_showcase?appName=Cluster0"
