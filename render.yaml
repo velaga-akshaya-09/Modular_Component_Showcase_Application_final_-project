@@ -28,12 +28,12 @@ services:
         fromService:
           type: web
           name: backend-node
-          envVarKey: RENDER_INTERNAL_URL
+          envVarKey: RENDER_EXTERNAL_URL
       - key: SPRING_BOOT_URL
         fromService:
           type: web
           name: backend-java
-          envVarKey: RENDER_INTERNAL_URL
+          envVarKey: RENDER_EXTERNAL_URL
 
   # ---------------------------------------------------------
   # 3. Backend Node (Express / MongoDB & PostgreSQL)
