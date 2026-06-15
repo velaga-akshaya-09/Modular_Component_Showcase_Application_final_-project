@@ -11,4 +11,4 @@ FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
 COPY --from=builder /app/target/coreservices-0.0.1-SNAPSHOT.jar app.jar
 EXPOSE 8000
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["sh", "-c", "sleep 15 && java -jar app.jar"]

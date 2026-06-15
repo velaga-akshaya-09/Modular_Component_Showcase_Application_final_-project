@@ -76,25 +76,9 @@ services:
     envVars:
       - key: JWT_SECRET
         generateValue: true
-      - key: DB_HOST
+      - key: DATABASE_URL
         fromDatabase:
           name: showcase-db
-          property: host
-      - key: DB_PORT
-        fromDatabase:
-          name: showcase-db
-          property: port
-      - key: DB_NAME
-        fromDatabase:
-          name: showcase-db
-          property: database
-      - key: SPRING_DATASOURCE_USERNAME
-        fromDatabase:
-          name: showcase-db
-          property: user
-      - key: SPRING_DATASOURCE_PASSWORD
-        fromDatabase:
-          name: showcase-db
-          property: password
+          property: connectionString
       - key: SPRING_DATA_MONGODB_URI
         value: "mongodb+srv://admin:admin123@cluster0.wjlq0bh.mongodb.net/component_showcase?appName=Cluster0"
