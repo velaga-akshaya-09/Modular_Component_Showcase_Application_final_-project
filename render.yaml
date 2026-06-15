@@ -1,7 +1,7 @@
 databases:
   - name: showcase-db
     databaseName: modular_showcase
-    user: postgres
+    user: showcaseadmin
     plan: free
 
 services:
