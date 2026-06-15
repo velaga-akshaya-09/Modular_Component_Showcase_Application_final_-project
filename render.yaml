@@ -1,0 +1,65 @@
+services:
+  # ---------------------------------------------------------
+  # 1. Frontend (React / Vite)
+  # ---------------------------------------------------------
+  - type: web
+    name: frontend
+    env: static
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: frontend/dist
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          type: web
+          name: gateway
+          envVarKey: RENDER_EXTERNAL_URL
+
+  # ---------------------------------------------------------
+  # 2. Gateway (Python FastAPI)
+  # ---------------------------------------------------------
+  - type: web
+    name: gateway
+    env: python
+    buildCommand: cd gateway && pip install -r requirements.txt
+    startCommand: cd gateway && uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: NODE_URL
+        fromService:
+          type: web
+          name: backend-node
+          envVarKey: RENDER_INTERNAL_URL
+      - key: SPRING_BOOT_URL
+        fromService:
+          type: web
+          name: backend-java
+          envVarKey: RENDER_INTERNAL_URL
+
+  # ---------------------------------------------------------
+  # 3. Backend Node (Express / MongoDB & PostgreSQL)
+  # ---------------------------------------------------------
+  - type: web
+    name: backend-node
+    env: node
+    buildCommand: cd backend-node && npm install
+    startCommand: cd backend-node && npm start
+    envVars:
+      - key: JWT_SECRET
+        generateValue: true
+      - key: MONGO_DB
+        value: component_showcase
+      - key: PORT
+        value: 5000
+      # NOTE: You MUST provide DATABASE_URL and MONGO_URI manually in the Render Dashboard
+
+  # ---------------------------------------------------------
+  # 4. Backend Java (Spring Boot / PostgreSQL & MongoDB)
+  # ---------------------------------------------------------
+  - type: web
+    name: backend-java
+    env: docker
+    dockerContext: backend/coreservices
+    dockerfilePath: backend/coreservices/Dockerfile
+    envVars:
+      # NOTE: You MUST provide SPRING_DATASOURCE_URL, USERNAME, PASSWORD, and SPRING_DATA_MONGODB_URI manually in the Render Dashboard
+      - key: JWT_SECRET
+        generateValue: true

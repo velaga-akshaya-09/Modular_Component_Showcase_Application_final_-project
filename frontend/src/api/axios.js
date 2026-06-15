@@ -34,8 +34,9 @@ export const getApiErrorMessage = (error, fallback = "Request failed. Please try
   );
 };
 
+const baseHost = import.meta.env.VITE_API_URL || "http://localhost:9000";
 const api = axios.create({
-  baseURL: "http://localhost:9000/gateway",
+  baseURL: `${baseHost}/gateway`,
 });
 
 api.interceptors.request.use((config) => {

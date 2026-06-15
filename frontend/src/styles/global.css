@@ -4582,3 +4582,22 @@ input:focus, textarea:focus, select:focus, .search-input-wrap:focus-within input
 .installation-block code {
   color: #454a34 !important;
 }
+
+
+/* FIX COMPONENT TITLES */
+.registry-row strong, .registry-row-pro strong {
+  color: #000000 !important;
+  font-size: 1.15rem !important;
+  width: auto !important;
+  height: auto !important;
+  background: transparent !important;
+}
+
+
+/* FIX ALL STRONG TAGS */
+strong:not(.skeleton-line) {
+  color: #454a34 !important;
+  background: transparent !important;
+  width: auto !important;
+  height: auto !important;
+}

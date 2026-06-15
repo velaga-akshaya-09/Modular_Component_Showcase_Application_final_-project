@@ -1,9 +1,10 @@
 from fastapi import APIRouter, Request, Response
 import requests
+from config.settings import NODE_URL
 
 router = APIRouter()
 
-NODE_URL = "http://localhost:5000"
+
 
 
 def forward_headers(request: Request):
